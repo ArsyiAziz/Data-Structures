@@ -34,7 +34,7 @@ bool HashTable::lookup(int key) const {
         counter++;
     }
 
-    if (elements[h] == NULL) {
+    if (elements[h] == NULL || counter == capacity) {
         return false;
     } else {
         return true;
@@ -57,18 +57,15 @@ void HashTable::insert(int key, int value) {
 int HashTable::get(int key) const{
     int h = hashFunc(key);
     int counter = 0;
-    while (elements[h] != NULL && elements[h]->key != key && counter < capacity)
-    {
+    while (elements[h] != NULL && elements[h]->key != key && counter < capacity) {
         h = (h + 1) % capacity;
         counter++;
     }
 
-    if (elements[h] == NULL)
-    {
+    if (elements[h] == NULL || counter == capacity) {
         return -1;
     }
-    else
-    {
+    else {
         return elements[h]->value;
     }
 }
@@ -80,13 +77,15 @@ void HashTable::remove(int key) {
         h = (h + 1) % capacity;
         counter++;
     }
+    if (counter == capacity) {
+        return;
+    }
     delete elements[h];
     elements[h] = NULL;
     currSize--;
 }
 
 HashTable::~HashTable() {
-    clear();
     delete[] elements;
 }
 
@@ -103,6 +102,28 @@ int main() {
     ht->insert(714141413, 7);
     ht->insert(1141414144, 8);
 
-    printf("%d\n", ht->lookup(1141414144));
-    printf("%d\n", ht->get(1141414144));
+    int keyToBeLookedUp = 144141433;
+    printf("Does the key %d exist in the hash table? ", keyToBeLookedUp);
+    printf("%d\n", ht->lookup(keyToBeLookedUp));
+
+    printf("The value of key %d is... ", keyToBeLookedUp);
+    printf("%d\n\n", ht->get(keyToBeLookedUp));
+
+    int keyToBeLookedUp2 = 214141333;
+    printf("Does the key %d exist in the hash table? ", keyToBeLookedUp2);
+    printf("%d\n", ht->lookup(keyToBeLookedUp2));
+
+    printf("The value of key %d is... ", keyToBeLookedUp2);
+    printf("%d\n\n", ht->get(keyToBeLookedUp2));
+
+    int keyToBeDeleted = 1141414144;
+    printf("Deleting the key %d\n", keyToBeDeleted);
+    ht->remove(keyToBeDeleted);
+
+    printf("Does the key %d exist in the hash table? ", keyToBeDeleted);
+    printf("%d\n", ht->lookup(keyToBeDeleted));
+
+    printf("The value of key %d is... ", keyToBeDeleted);
+    printf("%d\n", ht->get(keyToBeDeleted));
 }
+
