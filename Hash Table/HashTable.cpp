@@ -1,3 +1,8 @@
+
+// Written by
+// Arsyi Syarief Aziz
+// H071191003
+
 #include "HashTable.hpp"
 #include <stdio.h>
 #include <stdexcept>
